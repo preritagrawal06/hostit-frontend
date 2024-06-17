@@ -31,20 +31,32 @@ const Deployments = () => {
     const user = userStore((state) => state.user)
     const [project, setProject] = useState<Project>()
     const [deployments, setDeployments] = useState<Deployment[]>([])
-    useEffect(()=>{
-        const fetchProject = async()=>{
-            const data = await CallBackendApi({endpoint: '/project/getone', body:{projectId: params.projectId}})
+
+    const fetchDeployments = async () => {
+        const data = await CallBackendApi({ endpoint: "/project/deployments", body: { projectId: params.projectId } })
+        // console.log(data.deployments);
+        setDeployments(data.deployments)
+    }
+
+    useEffect(() => {
+        const fetchProject = async () => {
+            const data = await CallBackendApi({ endpoint: '/project/getone', body: { projectId: params.projectId } })
             // console.log(data.project.subDomain);
             setProject(data.project)
-        }
-        const fetchDeployments = async()=>{
-            const data = await CallBackendApi({endpoint: "/project/deployments", body: {projectId: params.projectId}})
-            // console.log(data.deployments);
-            setDeployments(data.deployments)
         }
         fetchProject()
         fetchDeployments()
     }, [])
+
+    const handleDeploy = async () => {
+        try {
+            const deployData = await CallBackendApi({ endpoint: "/deploy", body: { projectId: params.projectId, envs: [] } })
+            console.log(deployData);
+            fetchDeployments()
+        } catch (error) {
+            console.log((error as Error).message);
+        }
+    }
 
     return (user ?
         (
@@ -54,26 +66,26 @@ const Deployments = () => {
                         <h1 className="text-lg md:text-2xl font-semibold">{project && project.name}</h1>
                         <Link to="/#">{project && project.subDomain}</Link>
                     </div>
-                    <Button>Deploy</Button>
+                    <Button onClick={handleDeploy}>Deploy</Button>
                 </div>
                 {
-                    deployments.length > 0 ?
-                    <div className="w-[80%] mt-8 flex flex-col rounded-lg border">
-                        {
-                            deployments.map((deployment: Deployment, index: number)=>{
-                                return <DeploymentCard key={index}/>
-                            })
+                    deployments && deployments.length > 0 ?
+                        <div className="w-[80%] mt-8 flex flex-col rounded-lg border">
+                            {
+                                deployments.map((deployment: Deployment, index: number) => {
+                                    return <DeploymentCard key={index} deploymentDate={new Date(deployment.createdAt).toUTCString()} deploymentId={deployment.id} status={deployment.status}/>
+                                })
 
-                        }
-                    </div>
-                    :
-                    <p className="mt-8">No Deployments found</p>
+                            }
+                        </div>
+                        :
+                        <p className="mt-8">No Deployments found</p>
 
                 }
             </div>
         )
         :
-        <Navigate to="/login"/>
+        <Navigate to="/login" />
     );
 }
 

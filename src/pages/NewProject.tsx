@@ -76,6 +76,9 @@ const NewProject = () => {
                     title: "Success",
                     description: data.message,
                 })
+                const deployData = await CallBackendApi({endpoint:"/deploy", body: {projectId: data.project.id, envs: reqData.env}})
+                console.log(deployData);
+                
             } else{
                 toast({
                     title: "Error",
