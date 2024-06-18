@@ -13,6 +13,9 @@ import Dashboard from './pages/Dashboard.tsx';
 import NewProject from './pages/NewProject.tsx';
 import Deployments from './pages/Deployments.tsx';
 import Logs from './pages/Logs.tsx';
+import dashboardLoader from './lib/utils/loaderutils/dashboardLoader.ts';
+import DeploymentLoader from './lib/utils/loaderutils/deploymentsLoader.ts';
+import LogsLoader from './lib/utils/loaderutils/logsLoader.ts';
 
 const router = createBrowserRouter([
   {
@@ -29,7 +32,8 @@ const router = createBrowserRouter([
       },
       {
         path: "dashboard",
-        element: <Dashboard/>
+        element: <Dashboard/>,
+        loader: dashboardLoader
       },
       {
         path: "project",
@@ -44,10 +48,12 @@ const router = createBrowserRouter([
       {
         path: "project/:projectId",
         element: <Deployments/>,
+        loader: DeploymentLoader
       },
       {
         path:"logs/:deploymentId",
-        element: <Logs/>
+        element: <Logs/>,
+        loader: LogsLoader
       },
       {
         path: "*",

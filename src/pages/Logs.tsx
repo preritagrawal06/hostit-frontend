@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useLoaderData, useParams } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import { userStore } from "@/store/userStore"
 import { useEffect, useState } from "react";
@@ -19,6 +19,11 @@ type Log = {
     timestamp: string
 }
 
+type LoaderData = {
+    logs: Log[],
+    deployment: Deployment
+}
+
 const statusColor: any = {
     "FAIL": "text-red-500",
     "READY": "text-green-500",
@@ -29,25 +34,25 @@ const Logs = () => {
     const params = useParams()
     // console.log(params);
     const user = userStore((state) => state.user)
-    const [logs, setLogs] = useState([])
-    const [deployment, setDeployment] = useState<Deployment>()
+    const loaderData = useLoaderData() as LoaderData
+    const [logs, setLogs] = useState(loaderData.logs)
+    const [deployment, setDeployment] = useState<Deployment>(loaderData.deployment)
+
+    const fetchLogs = async()=>{
+        const {data} = await axios.get(`http://localhost:9000/api/v1/logs/${params.deploymentId}`, {headers:{Authorization: `Bearer ${localStorage.getItem('token')}`}})
+        // console.log(data);
+        setLogs(data.logs)
+    }
+
+    const fetchDeployment = async()=>{
+        const {data} = await axios.get(`http://localhost:9000/api/v1/project/deployment/${params.deploymentId}`, {headers:{Authorization: `Bearer ${localStorage.getItem('token')}`}})
+        // console.log(data);
+        setDeployment(data.deployment)
+    }
 
     useEffect(()=>{
-        
-        const fetchLogs = async()=>{
-            const {data} = await axios.get(`http://localhost:9000/api/v1/logs/${params.deploymentId}`, {headers:{Authorization: `Bearer ${localStorage.getItem('token')}`}})
-            // console.log(data);
-            setLogs(data.logs)
-        }
-
-        const fetchDeployment = async()=>{
-            const {data} = await axios.get(`http://localhost:9000/api/v1/project/deployment/${params.deploymentId}`, {headers:{Authorization: `Bearer ${localStorage.getItem('token')}`}})
-            // console.log(data);
-            setDeployment(data.deployment)
-        }
-
-        fetchLogs()
-        fetchDeployment()
+        // fetchLogs()
+        // fetchDeployment()
         
         const polling = setInterval(()=>{
             fetchLogs()
