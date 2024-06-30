@@ -8,7 +8,7 @@ type Props = {
 export const CallBackendApi = async ({endpoint, body} : Props)=>{
     try {
         const {data} = await axios.post(
-            `http://localhost:9000/api/v1${endpoint}`,
+            `${import.meta.env.VITE_PROD_BASE_URL}${endpoint}`,
             body,
             {
                 headers:{
