@@ -2,8 +2,6 @@ import ProjectCard from "@/components/project/projectCard";
 import { Link, useLoaderData } from "react-router-dom";
 import { userStore } from "@/store/userStore";
 import { Navigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "axios";
 
 type Project = {
     id: string,
