@@ -21,7 +21,7 @@ import { userStore } from "@/store/userStore"
 import { CallBackendApi } from "@/lib/utils/callBackendApi"
 
 interface envSchema {
-    key: string,
+    name: string,
     value: string
 }
 
@@ -30,7 +30,8 @@ const FormSchema = z.object({
     gitUrl: z.string(),
     build: z.string(),
     directory: z.string(),
-    env: z.array(z.object({ key: z.string(), value: z.string() }))
+    env: z.array(z.object({ name: z.string(), value: z.string() })),
+    pkgmngr: z.string()
 })
 
 const NewProject = () => {
@@ -39,14 +40,14 @@ const NewProject = () => {
 
     const [envVars, setEnvVars] = useState<envSchema[]>([])
 
-    const handleChange = (index: number, field: 'key' | 'value', value: string) => {
+    const handleChange = (index: number, field: 'name' | 'value', value: string) => {
         const newenvVars = [...envVars];
         newenvVars[index][field] = value;
         setEnvVars(newenvVars);
     };
 
     const handleAddVariable = () => {
-        setEnvVars([...envVars, { key: '', value: '' }]);
+        setEnvVars([...envVars, { name: '', value: '' }]);
     };
 
     const handleRemoveVariable = (index: number) => {
@@ -60,8 +61,9 @@ const NewProject = () => {
             name: "",
             gitUrl: "",
             build: "npm run build",
-            directory: "./",
-            env: envVars
+            directory: "",
+            env: envVars,
+            pkgmngr: "npm"
         },
     })
 
@@ -69,17 +71,32 @@ const NewProject = () => {
         reqData.env = envVars
 
         try {
-            const data = await CallBackendApi({endpoint: "/project", body: reqData})
-            console.log(data);
-            if(data.success){
+            const data = await CallBackendApi({ endpoint: "/project", body: reqData })
+            // console.log(data);
+            if (data.success) {
                 toast({
                     title: "Success",
                     description: data.message,
                 })
-                const deployData = await CallBackendApi({endpoint:"/deploy", body: {projectId: data.project.id, envs: reqData.env}})
-                console.log(deployData);
+                const overrides = [
+                    {
+                        name: "pkgmngr",
+                        value: reqData.pkgmngr
+                    },
+                    {
+                        name: "buildCommand",
+                        value: reqData.build
+                    },
+                    {
+                        name: "directory",
+                        value: reqData.directory
+                    }
+                ]
                 
-            } else{
+                const deployData = await CallBackendApi({ endpoint: "/deploy", body: { projectId: data.project.id, envs: reqData.env, overrides } })
+                console.log(deployData);
+
+            } else {
                 toast({
                     title: "Error",
                     description: data.message,
@@ -91,7 +108,7 @@ const NewProject = () => {
                 description: (error as Error).message
             })
         }
-        
+
     }
 
     return (user ?
@@ -151,6 +168,22 @@ const NewProject = () => {
                             />
                             <FormField
                                 control={form.control}
+                                name="pkgmngr"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Package Manager</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="npm" {...field} />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Package manager for your project (eg: npm, yarn)
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
                                 name="directory"
                                 render={({ field }) => (
                                     <FormItem>
@@ -172,7 +205,7 @@ const NewProject = () => {
                                     envVars.map((env: envSchema, index: number) => {
                                         return (
                                             <div key={index} className="flex gap-2 items-center">
-                                                <Input placeholder="Key" value={env.key} onChange={(e) => handleChange(index, 'key', e.target.value)} />
+                                                <Input placeholder="Key" value={env.name} onChange={(e) => handleChange(index, 'name', e.target.value)} />
                                                 <Input placeholder="Value" value={env.value} onChange={(e) => handleChange(index, 'value', e.target.value)} />
                                                 <Button variant="outline" type="button" onClick={() => handleRemoveVariable(index)}>
                                                     <img src="/delete.svg" alt="delete icon" width={32} height={32} />

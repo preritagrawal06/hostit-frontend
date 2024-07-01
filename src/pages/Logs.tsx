@@ -39,13 +39,13 @@ const Logs = () => {
     const [deployment, setDeployment] = useState<Deployment>(loaderData.deployment)
 
     const fetchLogs = async()=>{
-        const {data} = await axios.get(`http://localhost:9000/api/v1/logs/${params.deploymentId}`, {headers:{Authorization: `Bearer ${localStorage.getItem('token')}`}})
+        const {data} = await axios.get(`${import.meta.env.VITE_PROD_BASE_URL}/logs/${params.deploymentId}`, {headers:{Authorization: `Bearer ${localStorage.getItem('token')}`}})
         // console.log(data);
         setLogs(data.logs)
     }
 
     const fetchDeployment = async()=>{
-        const {data} = await axios.get(`http://localhost:9000/api/v1/project/deployment/${params.deploymentId}`, {headers:{Authorization: `Bearer ${localStorage.getItem('token')}`}})
+        const {data} = await axios.get(`${import.meta.env.VITE_PROD_BASE_URL}/project/deployment/${params.deploymentId}`, {headers:{Authorization: `Bearer ${localStorage.getItem('token')}`}})
         // console.log(data);
         setDeployment(data.deployment)
     }
@@ -57,7 +57,7 @@ const Logs = () => {
         const polling = setInterval(()=>{
             fetchLogs()
             fetchDeployment()
-        }, 60000)
+        }, 10000)
 
         return ()=>{clearInterval(polling)}
 
