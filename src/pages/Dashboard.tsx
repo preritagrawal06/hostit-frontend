@@ -32,20 +32,18 @@ const Dashboard = () => {
 
     return (user ?
         (
-            <div className="w-full flex p-10">
-                <div className="flex flex-wrap justify-center gap-6 px-0 md:px-4 py-4">
+            <div className="w-full flex flex-col p-10 gap-4">
+                <div className="flex px-0 md:px-4 items-center justify-between">
+                    <p className="text-3xl font-bold">{user.username}'s projects</p>
+                    <Link className="font-semibold" to='/project/new'>+ New Project</Link>
+                </div>
+                <div className="flex flex-wrap gap-6 px-0 md:px-4 py-4">
                     {
                         projects.length > 0 &&
                         projects.map((project: Project, index)=>{
-                            return <ProjectCard key={index} name={project.name} projectId={project.id}/>
+                            return <ProjectCard key={index} project={project}/>
                         })
                     }
-                    <Link to="/project/new" className="flex">
-                        <div className="w-[240px] flex flex-col items-center justify-center gap-4 p-4 cursor-pointer border border-dashed hover:rounded-lg hover:border-black transition-all">
-                            <h1 className="text-5xl font-bold">+</h1>
-                            <h1>New Project</h1>
-                        </div>
-                    </Link>
                 </div>
             </div>
         )

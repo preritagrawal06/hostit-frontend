@@ -1,19 +1,27 @@
 import { useNavigate } from "react-router-dom";
-type CardProp = {
+
+type Project = {
+    id: string,
     name: string,
-    projectId: string,
+    gitURL: string,
+    subDomain: string,
+    customDomain?: string,
+    userId: string,
+    createdAt: Date,
+    updatedAt?: Date
 }
-const ProjectCard = ({name, projectId}:CardProp) => {
+
+const ProjectCard = ({project}:{project: Project}) => {
     const navigate = useNavigate()
     return (
-        <div onClick={()=>{navigate(`/project/${projectId}`)}} className="flex flex-col items-center gap-4 p-4 border hover:rounded-lg hover:border-black transition-all duration-300 cursor-pointer">
-            <div className="w-[200px] h-[200px] bg-slate-500">
-                {/* insert preview image */}
+        <div onClick={()=>{navigate(`/project/${project.id}`)}} className="w-full md:w-[45%] lg:w-[30%] flex flex-col p-4 border hover:rounded-lg hover:border-black transition-all duration-300 cursor-pointer">
+            <h1>{project.name || "dummy name"}</h1>
+            <p>{project.subDomain}</p>
+            <div className="my-2 px-3 py-1 bg-gray-700 w-fit rounded-2xl flex gap-2 items-center">
+                <img src="/github.svg" alt="github logo" width={16}/>
+                <p className="text-sm text-white">{project.gitURL.substring(19, project.gitURL.length - 4)}</p>
             </div>
-            <div className="w-full flex justify-between items-center">
-                <h1>{name}</h1>
-                <p>Live</p>
-            </div>
+            <p className="text-sm">Created - {project.createdAt.toString().split('T')[0]}</p>
         </div>
     );
 }
