@@ -28,7 +28,7 @@ const router = createBrowserRouter([
         element: <Landing/>
       },
       {
-        path: "login",
+        path: "auth",
         element: <Auth/>
       },
       {

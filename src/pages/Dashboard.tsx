@@ -48,7 +48,7 @@ const Dashboard = () => {
             </div>
         )
         :
-        <Navigate to="/login"/>
+        <Navigate to="/auth"/>
     );
 }
  

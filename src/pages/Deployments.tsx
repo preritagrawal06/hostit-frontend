@@ -97,7 +97,7 @@ const Deployments = () => {
             </div>
         )
         :
-        <Navigate to="/login" />
+        <Navigate to="/auth" />
     );
 }
 

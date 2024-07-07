@@ -23,10 +23,10 @@ const Signup = () => {
     return (
         <div className="flex flex-col gap-8 items-center w-full px-4 border-0 md:border-l">
             <h1 className="text-2xl font-bold">SIGNUP</h1>
-            <Input type="email" placeholder="Username" value={username} onChange={(e)=>{setUsername(e.target.value)}}/>
-            <Input type="email" placeholder="Email" value={email} onChange={(e)=>{setEmail(e.target.value)}}/>
+            <Input required type="email" placeholder="Username" value={username} onChange={(e)=>{setUsername(e.target.value)}}/>
+            <Input required type="email" placeholder="Email" value={email} onChange={(e)=>{setEmail(e.target.value)}}/>
             <div className="flex w-full items-center space-x-2">
-                <Input type={visible ? "text" : "password"} placeholder="Password" value={password} onChange={(e)=>{setPassword(e.target.value)}}/>
+                <Input required type={visible ? "text" : "password"} placeholder="Password" value={password} onChange={(e)=>{setPassword(e.target.value)}}/>
                 <Button variant="outline" size="icon" onClick={() => { setVisible(!visible) }}>
                     {
                         visible ?

@@ -22,7 +22,7 @@ const Navbar = () => {
                     {
                         Navmenu.map((item, index) => {
                             return (
-                                !(item.authReq === true && user === null) && <Link className="hover:text-purple-600 duration-300" key={index} to={item.link}>{item.label}</Link>
+                                !(item.authReq === true && user === null) && <a className="hover:text-purple-600 duration-300" key={index} href={item.link}>{item.label}</a>
                             )
                         })
                     }
@@ -30,7 +30,7 @@ const Navbar = () => {
                         user ?
                             <Button onClick={userLogout}>Logout</Button>
                             :
-                            <Link to="/login">
+                            <Link to="/auth">
                                 <Button variant="default">Login</Button>
                             </Link>
                     }
@@ -49,7 +49,7 @@ const Navbar = () => {
                     user ?
                         <Button onClick={userLogout}>Logout</Button>
                         :
-                        <Link to="/login">
+                        <Link to="/auth">
                             <Button variant="default">Login</Button>
                         </Link>
                 }

@@ -4,14 +4,14 @@ export const Navmenu = [
         link: "/dashboard",
         authReq: true
     },
-    {
-        label: "Profile",
-        link: "/#",
-        authReq: true
-    },
+    // {
+    //     label: "Profile",
+    //     link: "/#",
+    //     authReq: true
+    // },
     {
         label: "About",
-        link: "/#",
+        link: "/#about",
         authReq: false
     },
 ]

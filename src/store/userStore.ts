@@ -1,3 +1,4 @@
+import { toast } from "@/components/ui/use-toast";
 import { CallBackendApi } from "@/lib/utils/callBackendApi";
 import { create } from "zustand";
 
@@ -18,35 +19,60 @@ export const userStore = create<UserState>(() => ({
 
 //TODO: toast message to handle any error
 export const userLogin = async ({ email, password }: User) => {
-  const data = await CallBackendApi({
-    endpoint: "/user/login",
-    body: { email, password },
-  });
-  if(data.success){
-    localStorage.setItem("token", data?.token);
-    localStorage.setItem("user", JSON.stringify(data?.user))
-    console.log(data?.user);
-    
-    userStore.setState((state) => ({
-      ...state,
-      user: data.user,
-    }));
+  try {
+    const data = await CallBackendApi({
+      endpoint: "/user/login",
+      body: { email, password },
+    });
+    if(data.success){
+      localStorage.setItem("token", data?.token);
+      localStorage.setItem("user", JSON.stringify(data?.user))
+      console.log(data?.user);
+      
+      userStore.setState((state) => ({
+        ...state,
+        user: data.user,
+      }));
+    } else{
+      toast({
+        title: "Login error",
+        description: data.message
+      })
+    }
+  } catch (error) {
+    toast({
+      title: "Error",
+      description: "Some internal error occured"
+    })
   }
 };
 
 export const userSignup = async ({ username, email, password }: User) => {
-  const data = await CallBackendApi({
-    endpoint: "/user/signup",
-    body: { username, email, password },
-  });
-  // console.log(data);
-  if(data.success){
-    localStorage.setItem("user", JSON.stringify(data?.user))
-    localStorage.setItem("token", data?.token);
-    userStore.setState((state) => ({
-      ...state,
-      user: data.user,
-    }));
+  try {
+    const data = await CallBackendApi({
+      endpoint: "/user/signup",
+      body: { username, email, password },
+    });
+    // console.log(data);
+    if(data.success){
+      localStorage.setItem("user", JSON.stringify(data?.user))
+      localStorage.setItem("token", data?.token);
+      userStore.setState((state) => ({
+        ...state,
+        user: data.user,
+      }));
+    } else{
+      toast({
+        title: "Signup error",
+        description: "Error signing up"
+      })
+    }
+  } catch (error) {
+      toast({
+        title: "Error",
+        description: "Internal error occured"
+      })
+    
   }
 };
 

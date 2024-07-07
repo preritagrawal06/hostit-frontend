@@ -90,7 +90,7 @@ const Logs = () => {
             </div>
         )
         :
-        <Navigate to="/login"/>
+        <Navigate to="/auth"/>
     );
 }
  

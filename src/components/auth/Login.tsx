@@ -22,9 +22,9 @@ const Login = () => {
     return (
         <div className="flex flex-col gap-8 items-center w-full px-4 pb-8 md:pb-0 border-b md:border-0">
             <h1 className="text-2xl font-bold">LOGIN</h1>
-            <Input type="email" placeholder="Email" value={email} onChange={(e)=>{setEmail(e.target.value)}}/>
+            <Input required type="email" placeholder="Email" value={email} onChange={(e)=>{setEmail(e.target.value)}}/>
             <div className="flex w-full items-center space-x-2">
-                <Input type={visible ? "text" : "password"} placeholder="Password" value={password} onChange={(e)=>{setPassword(e.target.value)}}/>
+                <Input required type={visible ? "text" : "password"} placeholder="Password" value={password} onChange={(e)=>{setPassword(e.target.value)}}/>
                 <Button variant="outline" size="icon" onClick={() => { setVisible(!visible) }}>
                     {
                         visible ?

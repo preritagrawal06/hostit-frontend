@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import { Toaster } from "@/components/ui/toaster"
 import { useState } from "react"
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { userStore } from "@/store/userStore"
 import { CallBackendApi } from "@/lib/utils/callBackendApi"
 
@@ -36,6 +36,7 @@ const FormSchema = z.object({
 
 const NewProject = () => {
 
+    const navigate = useNavigate()
     const user = userStore((state) => state.user)
 
     const [envVars, setEnvVars] = useState<envSchema[]>([])
@@ -95,7 +96,7 @@ const NewProject = () => {
                 
                 const deployData = await CallBackendApi({ endpoint: "/deploy", body: { projectId: data.project.id, envs: reqData.env, overrides } })
                 console.log(deployData);
-
+                navigate(`/project/${data.project.id}`)
             } else {
                 toast({
                     title: "Error",
@@ -125,7 +126,7 @@ const NewProject = () => {
                                     <FormItem>
                                         <FormLabel>Project Name</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Name of your project" {...field} />
+                                            <Input required placeholder="Name of your project" {...field} />
                                         </FormControl>
                                         <FormDescription>
                                             Enter the name of your project
@@ -141,7 +142,7 @@ const NewProject = () => {
                                     <FormItem>
                                         <FormLabel>Github URL</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="github URL" {...field} />
+                                            <Input required placeholder="github URL" {...field} />
                                         </FormControl>
                                         <FormDescription>
                                             URL of your github repository (Make sure that the repo is public)
@@ -223,7 +224,7 @@ const NewProject = () => {
             </div>
         )
         :
-        <Navigate to="/login" />
+        <Navigate to="/auth" />
     );
 }
 
