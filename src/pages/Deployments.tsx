@@ -71,7 +71,7 @@ const Deployments = () => {
                 <div className="flex w-[80%] p-4 md:p-8 justify-between items-center bg-gradient-to-r from-slate-50 to-slate-100 rounded-lg">
                     <div className="flex flex-col ">
                         <h1 className="text-lg md:text-2xl font-semibold">{project && project.name}</h1>
-                        <Link to="/#">{project && project.subDomain}</Link>
+                        <Link to={`https://${project.subDomain}.hostitapp.preritagrawal.in`} target="_blank">{project && project.subDomain}</Link>
                     </div>
                     <Button onClick={handleDeploy}>Deploy</Button>
                 </div>
