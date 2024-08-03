@@ -14,10 +14,15 @@ const Signup = () => {
     const navigate = useNavigate()
 
     const handleClick = async ()=>{
-        setLoading(true)
-        await userSignup({username, email, password})
-        setLoading(false)
-        navigate("/dashboard")
+        try {
+            setLoading(true)
+            const signup = await userSignup({username, email, password})
+            setLoading(false)
+            if(signup) navigate("/dashboard")
+            
+        } catch (error) {
+            console.log((error as Error).message);
+        }
     }
     
     return (

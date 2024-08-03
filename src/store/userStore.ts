@@ -33,11 +33,13 @@ export const userLogin = async ({ email, password }: User) => {
         ...state,
         user: data.user,
       }));
+      return true
     } else{
       toast({
         title: "Login error",
         description: data.message
       })
+      return false
     }
   } catch (error) {
     toast({
@@ -61,11 +63,13 @@ export const userSignup = async ({ username, email, password }: User) => {
         ...state,
         user: data.user,
       }));
+      return true
     } else{
       toast({
         title: "Signup error",
         description: "Error signing up"
       })
+      return false
     }
   } catch (error) {
       toast({
